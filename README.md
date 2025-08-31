@@ -310,9 +310,9 @@ This project demonstrates expertise in:
 
 ## 📞 Contact
 
-- **LinkedIn**: [Your LinkedIn Profile](https://www.linkedin.com/in/devansh-khatri-aaa7832bb/)
+- **LinkedIn**: [My LinkedIn Profile](https://www.linkedin.com/in/devansh-khatri-aaa7832bb/)
 - **Email**: ddevansh@uoguelph.ca
-- **Portfolio**: [Your Portfolio Website](https://devansh7.netlify.app/)
+- **Portfolio**: [My Portfolio Website](https://devansh7.netlify.app/)
 
 ---
 
