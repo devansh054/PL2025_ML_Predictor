@@ -1,0 +1,73 @@
+#!/usr/bin/env python3
+"""
+Simple Runner for Enhanced PL Predictor
+Use this for the minimal 3-file setup
+"""
+
+import os
+from datetime import datetime
+
+def main():
+    print("\n" + "=" * 50)
+    print("🏈 Enhanced Premier League Predictor")
+    print("=" * 50)
+    print(f"📅 {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    
+    # Check if required files exist
+    if not os.path.exists("matches.csv"):
+        print("❌ ERROR: matches.csv not found!")
+        print("📋 Please ensure matches.csv is in the same directory")
+        return
+    
+    if not os.path.exists("pl_predictor.py"):
+        print("❌ ERROR: pl_predictor.py not found!")
+        print("📋 Please ensure pl_predictor.py is in the same directory")
+        return
+    
+    print("✅ Required files found")
+    
+    try:
+        # Import and run predictor
+        from pl_predictor import EnhancedPLPredictor
+        
+        print("🔄 Loading data and initializing predictor...")
+        predictor = EnhancedPLPredictor("matches.csv")
+        
+        print("🧠 Running complete analysis...")
+        print("   This may take 30-60 seconds...")
+        results = predictor.run_complete_analysis()
+        
+        # Show quick summary
+        print("\n" + "=" * 50)
+        print("📈 QUICK RESULTS SUMMARY")
+        print("=" * 50)
+        
+        best_model = max(results.items(), key=lambda x: x[1]['precision'])
+        print(f"🏆 Best Model: {best_model[0]}")
+        print(f"   Precision: {best_model[1]['precision']:.1%}")
+        print(f"   Accuracy:  {best_model[1]['accuracy']:.1%}")
+        
+        print(f"\n📊 All Models:")
+        for model_name, model_results in results.items():
+            print(f"   {model_name}: {model_results['precision']:.1%} precision")
+        
+        print(f"\n🚀 Key Improvements:")
+        print(f"   ✅ Multiple ML algorithms")
+        print(f"   ✅ ELO ratings & rolling stats")
+        print(f"   ✅ Cross-validation")
+        print(f"   ✅ Feature importance analysis")
+        
+        print("\n✅ Analysis completed successfully!")
+        print("💡 Check the generated plots for feature importance")
+        
+    except ImportError as e:
+        print(f"❌ Import Error: {e}")
+        print("📦 Please install required packages:")
+        print("   pip install pandas numpy matplotlib seaborn scikit-learn")
+        
+    except Exception as e:
+        print(f"❌ Error: {e}")
+        print("🔍 Please check your files and try again")
+
+if __name__ == "__main__":
+    main()

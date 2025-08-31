@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <circle cx="50" cy="50" r="45" fill="#0057B8" stroke="#FFCD00" stroke-width="2"/>
+  <circle cx="50" cy="50" r="35" fill="#FFCD00"/>
+  <text x="50" y="55" text-anchor="middle" fill="#0057B8" font-family="Arial, sans-serif" font-size="12" font-weight="bold">BHA</text>
+</svg>

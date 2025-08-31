@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: pl-predictor
+  labels:
+    name: pl-predictor
+    environment: production
