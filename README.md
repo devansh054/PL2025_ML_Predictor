@@ -17,11 +17,7 @@ This application showcases advanced software engineering practices across the fu
 - **DevOps**: Docker containerization, Kubernetes orchestration, CI/CD with GitHub Actions
 - **Monitoring**: Prometheus metrics, Grafana dashboards, structured logging
 
-## 🚀 Live Demo
 
-- **Frontend**: [https://pl-predictor.vercel.app](https://pl-predictor.vercel.app)
-- **API Documentation**: [https://api.pl-predictor.com/docs](https://api.pl-predictor.com/docs)
-- **Monitoring Dashboard**: [https://grafana.pl-predictor.com](https://grafana.pl-predictor.com)
 
 ## ✨ Key Features
 
