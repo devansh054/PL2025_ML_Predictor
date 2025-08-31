@@ -1,4 +1,4 @@
-# 🏆 Premier League Predictor - FAANG-Level ML Application
+# 🏆 Premier League Predictor
 
 [![Build Status](https://github.com/username/pl-predictor/workflows/CI/badge.svg)](https://github.com/username/pl-predictor/actions)
 [![Coverage](https://codecov.io/gh/username/pl-predictor/branch/main/graph/badge.svg)](https://codecov.io/gh/username/pl-predictor)
