@@ -2,9 +2,26 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import PremierLeaguePredictor from '../app/page'
 
-// Mock the Canvas component from @react-three/fiber
+// Mock React Three Fiber components
 jest.mock('@react-three/fiber', () => ({
   Canvas: ({ children }: { children: React.ReactNode }) => <div data-testid="canvas">{children}</div>,
+  useFrame: jest.fn(),
+  useThree: jest.fn(() => ({ viewport: { width: 1, height: 1 } })),
+}))
+
+// Mock React Three Drei components
+jest.mock('@react-three/drei', () => ({
+  OrbitControls: () => null,
+  Text: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  Box: () => <div data-testid="box" />,
+  Sphere: () => <div data-testid="sphere" />,
+}))
+
+// Mock Three.js
+jest.mock('three', () => ({
+  Vector3: jest.fn(),
+  Color: jest.fn(),
+  MeshStandardMaterial: jest.fn(),
 }))
 
 // Mock axios
@@ -14,6 +31,15 @@ jest.mock('axios', () => ({
 }))
 
 const mockAxios = require('axios')
+
+// Mock framer-motion
+jest.mock('framer-motion', () => ({
+  motion: {
+    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+    button: ({ children, ...props }: any) => <button {...props}>{children}</button>,
+  },
+  AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}))
 
 describe('Premier League Predictor', () => {
   beforeEach(() => {
