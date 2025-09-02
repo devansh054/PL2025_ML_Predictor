@@ -237,10 +237,10 @@ export default function Predictions() {
         const data = await response.json();
         // Map backend response to frontend expected format
         const mappedData = {
-          home_win_probability: data.win_probability,
-          away_win_probability: data.loss_probability,
-          draw_probability: data.draw_probability,
-          confidence: data.confidence_score,
+          home_win_probability: data.home_win_prob,
+          away_win_probability: data.away_win_prob,
+          draw_probability: data.draw_prob,
+          confidence: data.confidence,
           predicted_score: `${Math.floor(Math.random() * 3 + 1)}-${Math.floor(Math.random() * 3 + 1)}`
         };
         setPrediction(mappedData);
