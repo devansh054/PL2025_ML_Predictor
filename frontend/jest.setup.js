@@ -1,5 +1,42 @@
 import '@testing-library/jest-dom'
 
+// Mock all React Three Fiber and related libraries
+jest.mock('@react-three/fiber', () => ({
+  Canvas: ({ children }) => <div data-testid="canvas">{children}</div>,
+  useFrame: jest.fn(),
+  useThree: jest.fn(() => ({ viewport: { width: 1, height: 1 } })),
+  extend: jest.fn(),
+}))
+
+jest.mock('@react-three/drei', () => ({
+  OrbitControls: () => null,
+  Text: ({ children }) => <div>{children}</div>,
+  Box: () => <div data-testid="box" />,
+  Sphere: () => <div data-testid="sphere" />,
+  useTexture: jest.fn(() => ({})),
+  Html: ({ children }) => <div>{children}</div>,
+}))
+
+jest.mock('three', () => ({
+  Vector3: jest.fn(),
+  Color: jest.fn(),
+  MeshStandardMaterial: jest.fn(),
+  BoxGeometry: jest.fn(),
+  SphereGeometry: jest.fn(),
+  Mesh: jest.fn(),
+  Scene: jest.fn(),
+  PerspectiveCamera: jest.fn(),
+  WebGLRenderer: jest.fn(),
+}))
+
+jest.mock('framer-motion', () => ({
+  motion: {
+    div: ({ children, ...props }) => <div {...props}>{children}</div>,
+    button: ({ children, ...props }) => <button {...props}>{children}</button>,
+  },
+  AnimatePresence: ({ children }) => <>{children}</>,
+}))
+
 // Mock IntersectionObserver
 global.IntersectionObserver = class IntersectionObserver {
   constructor() {}
@@ -23,8 +60,8 @@ Object.defineProperty(window, 'matchMedia', {
     matches: false,
     media: query,
     onchange: null,
-    addListener: jest.fn(), // deprecated
-    removeListener: jest.fn(), // deprecated
+    addListener: jest.fn(),
+    removeListener: jest.fn(),
     addEventListener: jest.fn(),
     removeEventListener: jest.fn(),
     dispatchEvent: jest.fn(),
