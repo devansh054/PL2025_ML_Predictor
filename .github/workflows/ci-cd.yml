@@ -67,7 +67,7 @@ jobs:
     
     - name: Run Python tests
       env:
-        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
+        DATABASE_URL: sqlite+aiosqlite:///:memory:
         REDIS_URL: redis://localhost:6379
       run: |
         cd backend
