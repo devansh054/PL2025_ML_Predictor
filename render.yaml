@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: pl-predictor-backend
+    env: python
+    buildCommand: "cd backend && pip install -r requirements.txt"
+    startCommand: "cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT"
+    plan: free
+    healthCheckPath: /
+    envVars:
+      - key: DATABASE_URL
+        value: sqlite:///./pl_predictor.db
+      - key: REDIS_URL
+        value: redis://localhost:6379
+      - key: LOG_LEVEL
+        value: info
+      - key: CORS_ORIGINS
+        value: "https://your-netlify-app.netlify.app,http://localhost:3000"
+    disk:
+      name: pl-predictor-disk
+      mountPath: /opt/render/project/backend
+      sizeGB: 1

@@ -1,7 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Enable standalone output for Docker
-  output: 'standalone',
+  // Enable static export for Netlify
+  output: 'export',
+  trailingSlash: true,
+  images: {
+    unoptimized: true,
+  },
   
   // Enable experimental features
   experimental: {
