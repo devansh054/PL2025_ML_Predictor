@@ -2,13 +2,10 @@
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+# Using built-in typing instead of pydantic to avoid compilation
 from typing import List, Dict, Any
-import pandas as pd
 import numpy as np
-import pickle
 import os
-import logging
 from datetime import datetime
 
 # Setup logging
@@ -30,19 +27,22 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Pydantic models
-class PredictionRequest(BaseModel):
-    home_team: str
-    away_team: str
+# Simple data structures (no pydantic to avoid compilation)
+class PredictionRequest:
+    def __init__(self, home_team: str, away_team: str):
+        self.home_team = home_team
+        self.away_team = away_team
 
-class PredictionResponse(BaseModel):
-    home_team: str
-    away_team: str
-    home_win_prob: float
-    draw_prob: float
-    away_win_prob: float
-    predicted_outcome: str
-    confidence: float
+class PredictionResponse:
+    def __init__(self, home_team: str, away_team: str, home_win_prob: float, 
+                 draw_prob: float, away_win_prob: float, predicted_outcome: str, confidence: float):
+        self.home_team = home_team
+        self.away_team = away_team
+        self.home_win_prob = home_win_prob
+        self.draw_prob = draw_prob
+        self.away_win_prob = away_win_prob
+        self.predicted_outcome = predicted_outcome
+        self.confidence = confidence
 
 # Load simple predictor
 try:
@@ -85,16 +85,19 @@ async def get_teams():
     ]
     return {"teams": teams}
 
-@app.post("/predict", response_model=PredictionResponse)
-async def predict_match(request: PredictionRequest):
+@app.post("/predict")
+async def predict_match(request: Dict[str, str]):
     """Predict Premier League match outcome."""
     try:
         if not predictor:
             raise HTTPException(status_code=503, detail="Predictor not available")
         
         # Simple prediction logic
-        home_team = request.home_team
-        away_team = request.away_team
+        home_team = request.get("home_team")
+        away_team = request.get("away_team")
+        
+        if not home_team or not away_team:
+            raise HTTPException(status_code=400, detail="Missing home_team or away_team")
         
         # Mock prediction for deployment (replace with actual logic)
         home_prob = np.random.uniform(0.2, 0.6)
@@ -109,15 +112,15 @@ async def predict_match(request: PredictionRequest):
         
         logger.info(f"Prediction: {home_team} vs {away_team} -> {predicted_outcome}")
         
-        return PredictionResponse(
-            home_team=home_team,
-            away_team=away_team,
-            home_win_prob=round(home_prob, 3),
-            draw_prob=round(draw_prob, 3),
-            away_win_prob=round(away_prob, 3),
-            predicted_outcome=predicted_outcome,
-            confidence=round(confidence, 3)
-        )
+        return {
+            "home_team": home_team,
+            "away_team": away_team,
+            "home_win_prob": round(home_prob, 3),
+            "draw_prob": round(draw_prob, 3),
+            "away_win_prob": round(away_prob, 3),
+            "predicted_outcome": predicted_outcome,
+            "confidence": round(confidence, 3)
+        }
         
     except Exception as e:
         logger.error(f"Prediction error: {e}")
