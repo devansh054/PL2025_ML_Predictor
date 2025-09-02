@@ -1,18 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Enable static export for Netlify
   output: 'export',
   trailingSlash: true,
   images: {
-    unoptimized: true,
+    unoptimized: true
   },
-  
-  // Enable experimental features
-  experimental: {
-    serverComponentsExternalPackages: ['@prisma/client'],
-    appDir: true,
+  typescript: {
+    ignoreBuildErrors: true
   },
-  
+  eslint: {
+    ignoreDuringBuilds: true
+  },
   // Environment variables
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000',

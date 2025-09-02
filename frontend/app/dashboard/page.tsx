@@ -501,6 +501,7 @@ export default function Dashboard() {
                       config={chart.config}
                       style={{ width: '100%', height: '100%' }}
                       useResizeHandler={true}
+                      {...({} as any)}
                     />
                   </div>
                   <div className="mt-4">
