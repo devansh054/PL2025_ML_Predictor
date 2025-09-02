@@ -183,7 +183,8 @@ export default function AIAssistantPage() {
 
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:8000/nlp/query', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://pl2025-ml-predictor-1.onrender.com';
+      const res = await fetch(`${apiUrl}/nlp/query`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -209,7 +210,8 @@ export default function AIAssistantPage() {
     
     setPredictionLoading(true);
     try {
-      const res = await fetch('http://localhost:8000/predict', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://pl2025-ml-predictor-1.onrender.com';
+      const res = await fetch(`${apiUrl}/predict`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
