@@ -1,8 +1,6 @@
 # 🏆 Premier League Predictor
 
-[![Build Status](https://github.com/username/pl-predictor/workflows/CI/badge.svg)](https://github.com/username/pl-predictor/actions)
-[![Coverage](https://codecov.io/gh/username/pl-predictor/branch/main/graph/badge.svg)](https://codecov.io/gh/username/pl-predictor)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 
 A production-ready, full-stack machine learning application for predicting Premier League match outcomes. Built with modern technologies and enterprise-grade architecture patterns to demonstrate senior-level engineering skills.
 
