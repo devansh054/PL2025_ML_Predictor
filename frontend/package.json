@@ -7,9 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:ci": "jest --ci --coverage --watchAll=false",
+    "test": "jest --testPathIgnorePatterns=e2e",
+    "test:watch": "jest --watch --testPathIgnorePatterns=e2e",
+    "test:ci": "jest --ci --coverage --watchAll=false --testPathIgnorePatterns=e2e",
     "test:e2e": "playwright test",
     "type-check": "tsc --noEmit"
   },

@@ -63,7 +63,8 @@ jobs:
     - name: Install Node.js dependencies
       run: |
         cd frontend
-        npm ci
+        rm -rf node_modules package-lock.json .next
+        npm install
     
     - name: Run Python tests
       env:
@@ -76,7 +77,7 @@ jobs:
     - name: Run Frontend tests
       run: |
         cd frontend
-        npm run test -- --passWithNoTests
+        npm run test -- --passWithNoTests --clearCache
     
     - name: Run E2E tests
       run: |
