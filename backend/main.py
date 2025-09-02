@@ -67,14 +67,13 @@ async def predict_match(request: Dict[str, str]):
         if not predictor:
             raise HTTPException(status_code=503, detail="Predictor not available")
         
-        # Simple prediction logic
         home_team = request.get("home_team")
         away_team = request.get("away_team")
         
         if not home_team or not away_team:
             raise HTTPException(status_code=400, detail="Missing home_team or away_team")
         
-        # Mock prediction for deployment (using built-in random)
+        # Generate mock probabilities using built-in random
         home_prob = random.uniform(0.2, 0.6)
         draw_prob = random.uniform(0.2, 0.4)
         away_prob = 1.0 - home_prob - draw_prob
@@ -99,6 +98,44 @@ async def predict_match(request: Dict[str, str]):
         
     except Exception as e:
         logger.error(f"Prediction error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/nlp/query")
+async def nlp_query(request: Dict[str, str]):
+    """Simple NLP query endpoint for AI assistant."""
+    try:
+        query = request.get("query", "").strip()
+        
+        if not query:
+            raise HTTPException(status_code=400, detail="Missing query")
+        
+        # Simple mock NLP responses
+        query_lower = query.lower()
+        
+        if "predict" in query_lower or "match" in query_lower:
+            response = "I can help you predict match outcomes! Please select two teams and I'll provide win probabilities."
+        elif "team" in query_lower:
+            response = "I have information about all 20 Premier League teams. Which team would you like to know about?"
+        elif "stats" in query_lower or "statistic" in query_lower:
+            response = "I can provide various statistics including win rates, goal averages, and performance metrics."
+        elif "help" in query_lower:
+            response = "I can help you with match predictions, team information, and Premier League statistics. What would you like to know?"
+        else:
+            response = f"I understand you're asking about: '{query}'. I can help with match predictions, team stats, and Premier League analysis. Could you be more specific?"
+        
+        return {
+            "response": response,
+            "query": query,
+            "confidence": 0.85,
+            "suggestions": [
+                "Ask about match predictions",
+                "Get team statistics", 
+                "Compare team performance"
+            ]
+        }
+        
+    except Exception as e:
+        logger.error(f"NLP query error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
