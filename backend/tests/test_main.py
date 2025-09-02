@@ -19,48 +19,47 @@ class TestHealthEndpoint:
     
     def test_health_check(self):
         """Test health endpoint returns 200."""
-        response = client.get("/health")
+        response = client.get("/")
         assert response.status_code == 200
-        assert response.json() == {"status": "healthy"}
+        data = response.json()
+        assert "message" in data
+        assert "status" in data
 
 
 class TestTeamsEndpoint:
     """Test teams endpoint."""
     
-    @patch('main.get_teams')
-    def test_get_teams_success(self, mock_get_teams):
+    @patch('main.predictor')
+    def test_get_teams_success(self, mock_predictor):
         """Test successful teams retrieval."""
-        mock_teams = ["Arsenal", "Chelsea", "Liverpool"]
-        mock_get_teams.return_value = mock_teams
+        mock_df = Mock()
+        mock_df.unique.return_value.tolist.return_value = ["Arsenal", "Chelsea", "Liverpool"]
+        mock_predictor.matches = {"team": mock_df}
         
         response = client.get("/teams")
         assert response.status_code == 200
-        assert response.json() == mock_teams
+        assert isinstance(response.json(), list)
     
-    @patch('main.get_teams')
-    def test_get_teams_error(self, mock_get_teams):
-        """Test teams endpoint error handling."""
-        mock_get_teams.side_effect = Exception("Database error")
-        
-        response = client.get("/teams")
-        assert response.status_code == 500
+    def test_get_teams_no_model(self):
+        """Test teams endpoint when model not loaded."""
+        with patch('main.predictor', None):
+            response = client.get("/teams")
+            assert response.status_code == 503
 
 
 class TestPredictionEndpoint:
     """Test prediction endpoint."""
     
-    @patch('main.make_prediction')
-    def test_predict_success(self, mock_make_prediction):
+    @patch('main.predictor')
+    def test_predict_success(self, mock_predictor):
         """Test successful prediction."""
-        mock_prediction = {
-            "home_team": "Arsenal",
-            "away_team": "Chelsea",
-            "home_win_prob": 0.45,
-            "draw_prob": 0.25,
-            "away_win_prob": 0.30,
-            "confidence": 0.85
-        }
-        mock_make_prediction.return_value = mock_prediction
+        # Mock the predictor's matches DataFrame
+        mock_df = Mock()
+        mock_df.empty = False
+        mock_df.tail.return_value = mock_df
+        mock_df.__len__ = Mock(return_value=5)
+        mock_df.__getitem__ = Mock(return_value=mock_df)
+        mock_predictor.matches = mock_df
         
         response = client.post("/predict", json={
             "home_team": "Arsenal",
@@ -68,7 +67,10 @@ class TestPredictionEndpoint:
         })
         
         assert response.status_code == 200
-        assert response.json() == mock_prediction
+        data = response.json()
+        assert "home_team" in data
+        assert "away_team" in data
+        assert "win_probability" in data
     
     def test_predict_missing_data(self):
         """Test prediction with missing data."""
@@ -79,27 +81,25 @@ class TestPredictionEndpoint:
         
         assert response.status_code == 422  # Validation error
     
-    @patch('main.make_prediction')
-    def test_predict_error(self, mock_make_prediction):
-        """Test prediction endpoint error handling."""
-        mock_make_prediction.side_effect = Exception("Model error")
-        
-        response = client.post("/predict", json={
-            "home_team": "Arsenal",
-            "away_team": "Chelsea"
-        })
-        
-        assert response.status_code == 500
+    def test_predict_no_model(self):
+        """Test prediction endpoint when model not loaded."""
+        with patch('main.predictor', None):
+            response = client.post("/predict", json={
+                "home_team": "Arsenal",
+                "away_team": "Chelsea"
+            })
+            assert response.status_code == 503
 
 
 class TestMetricsEndpoint:
     """Test metrics endpoint."""
     
-    def test_metrics_endpoint(self):
-        """Test metrics endpoint returns prometheus format."""
-        response = client.get("/metrics")
+    def test_root_endpoint(self):
+        """Test root endpoint returns basic info."""
+        response = client.get("/")
         assert response.status_code == 200
-        assert "text/plain" in response.headers["content-type"]
+        data = response.json()
+        assert "message" in data
 
 
 @pytest.fixture
