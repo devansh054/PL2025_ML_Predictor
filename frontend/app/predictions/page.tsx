@@ -191,12 +191,13 @@ export default function Predictions() {
 
   const fetchTeams = async () => {
     try {
-      const response = await fetch('http://localhost:8000/teams');
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://pl2025-ml-predictor-1.onrender.com';
+      const response = await fetch(`${apiUrl}/teams`);
       if (response.ok) {
         const data = await response.json();
-        setTeams(data);
+        setTeams(data.teams || []);
       } else {
-        setTeams(Object.keys(teamThemes));
+        throw new Error('Failed to fetch teams');
       }
     } catch (err) {
       console.error('Failed to fetch teams:', err);
@@ -220,7 +221,8 @@ export default function Predictions() {
     setPrediction(null);
 
     try {
-      const response = await fetch('http://localhost:8000/predict', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://pl2025-ml-predictor-1.onrender.com';
+      const response = await fetch(`${apiUrl}/predict`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
