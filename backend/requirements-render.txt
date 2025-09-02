@@ -1,0 +1,29 @@
+# Minimal requirements for Render deployment (no compilation needed)
+
+# Core FastAPI dependencies
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.0
+pydantic-settings==2.1.0
+
+# Database (SQLite for simplicity)
+sqlalchemy==2.0.23
+
+# Basic ML
+scikit-learn>=1.4.0
+pandas>=2.0.0
+numpy>=1.24.0
+joblib>=1.3.0
+
+# HTTP client
+httpx==0.25.2
+
+# Lightweight NLP
+nltk>=3.8.0
+textblob>=0.17.0
+
+# Environment
+python-dotenv==1.0.0
+
+# Monitoring (basic)
+structlog==23.2.0

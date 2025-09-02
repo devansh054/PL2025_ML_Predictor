@@ -15,14 +15,26 @@ from datetime import datetime
 import uuid
 
 # Import enhanced ML components
-from ml_pipeline import MLPipeline
-from feature_engineering import feature_engineer
-from explainability import model_explainer, ExplanationResult
-from ab_testing import ab_testing
-from database import get_db, AsyncSession
-from cache import cache_manager
-from monitoring import monitor_endpoint, record_prediction, logger
-from huggingface_nlp import get_huggingface_nlp, HuggingFaceQueryResponse
+# Lightweight imports for Render deployment
+try:
+    from ml_pipeline import MLPipeline
+    from feature_engineering import feature_engineer
+    from ab_testing import ab_testing
+    from database import get_db, AsyncSession
+    from cache import cache_manager
+    from monitoring import monitor_endpoint, record_prediction, logger
+except ImportError:
+    # Fallback for missing dependencies
+    MLPipeline = None
+    feature_engineer = None
+    ab_testing = None
+    get_db = None
+    AsyncSession = None
+    cache_manager = None
+    monitor_endpoint = lambda f: f
+    record_prediction = lambda *args: None
+    logger = logging.getLogger(__name__)
+# from huggingface_nlp import get_huggingface_nlp, HuggingFaceQueryResponse  # Disabled for Render
 import time
 
 # Import legacy predictor for fallback

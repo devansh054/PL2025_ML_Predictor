@@ -7,10 +7,11 @@ from typing import Dict, List, Any, Optional
 from dataclasses import dataclass
 from datetime import datetime
 import structlog
+import nltk
+from textblob import TextBlob
+import logging
 
-# Import Hugging Face Transformers
-from transformers import pipeline, AutoTokenizer, AutoModelForSequenceClassification
-import torch
+# Lightweight NLP processing (no heavy dependencies for Render deployment)
 
 logger = structlog.get_logger()
 
